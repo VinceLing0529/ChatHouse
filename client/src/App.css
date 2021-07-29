@@ -1,6 +1,3 @@
-.App {
-  text-align: center;
-}
 
 .App-logo {
   height: 40vmin;
@@ -42,8 +39,10 @@
   border: 1px solid #ccc;
   width: 500px;
   height: 350px;
-  overflow-y: auto;
   font-size: 14px;
+  overflow-y: auto;
+
+  
 }
 #messageInput {
   height: 80px;

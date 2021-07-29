@@ -3,48 +3,28 @@ import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import { Link } from "@reach/router";
 import io from 'socket.io-client';
-import Message from "../components/Message";
+import Message from "../components/SendMessage";
 export default props => {
     const [room,setRoom] = useState({});
-    const [socket] = useState(() => io(':8000'));
     const [userName, setUserName] = useState("");
     const [hasName, setHasName] = useState(false);
+    const [loaded, setLoaded] = useState(false);
+
     const [currMessage, setCurrMessage] = useState("");
     const [message,setMessages] = useState();
     
 
-//   useEffect( () => {
-//     socket.on('msg', (userName,msg) => 
-        
-//         setMessages(sentMsg => {
-//             return [...sentMsg, {user:userName, msg: msg}];
-//         }
-        
-//         )
-//         )
-       
-//     }, []);
+    useEffect(() => {
+        axios.get("http://localhost:8000/api/message/" + props.id)
+            .then(res =>{
+            setMessages(res.data);
+            setLoaded(true);
+        })
+    }, [])
 
-socket.on('msg', function (userName, msg) {
-    
-    console.log(userName)
-    console.log(msg)  
-  });
-
-
-    const onSubmitHandler = e => {
-        e.preventDefault();
-        socket.send(currMessage);
-        setCurrMessage("");
-        console.log(message);
-    };
 
     const onNameSubmitHandler = e => {
         e.preventDefault();
-        socket.on('connect', function () {
-            socket.emit('join', userName,props.id);
-          });
-         
             setHasName(true);
     };
     
@@ -79,19 +59,18 @@ socket.on('msg', function (userName, msg) {
        
 
         <div id="msglog">
-        {/* {message.map( (message, idx) => {
-                        return(
-                                <Message key={idx} message={message} user={userName}/>
-                        );
-         } )} */}
+        {loaded&&message.map((messages, idx)=>{
+                return (    
+                <p>{messages.name} : {messages.message}</p>
+                
+                               
+                )
+                
+            })}
         </div>
-        <form onSubmit={onSubmitHandler}>
-        <textarea name="message" id="messageInput"   onChange={ (e) => setCurrMessage(e.target.value) } value={currMessage}></textarea>
-        <br/>
-        <button>Send Message</button>
-        </form>
+        
+        <Message user = {userName} id = {props.id}/>
 
-        <Link to = {"/"} ><button >Leave room</button></Link>
 
         </div>
 

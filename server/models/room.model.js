@@ -28,3 +28,26 @@ const RoomSchema = new mongoose.Schema({
 
 module.exports.Room = mongoose.model('Room', RoomSchema);
 
+const MessageSchema = new mongoose.Schema({
+    message: { type: String ,
+        required: [
+            true,
+            
+        ],
+
+    },
+    name: { type: String ,
+        required: [
+            true,
+        ]
+
+    },
+    roomId:{type:String,
+        required: [
+            true,
+        ],
+    },
+
+}, { timestamps: true });
+
+module.exports.Message = mongoose.model('Message', MessageSchema);
